@@ -3,6 +3,8 @@ from tkinter import *
 
 
 def clicked():
+    plt.close('all')    #if windows was opened, we will close it and open new again
+
     years = years_.get()
     inflation = inflation_.get()    #getting string data from it
     monthly = monthly_.get()
@@ -23,23 +25,29 @@ def clicked():
 
     #alghoritm
     amount = []     #the list of years amounts
+    without_invest = []
     years_list = []     #the list of years
     general_amount = 0      #amount at the end of the year
+    general_amount_2 = 0    #amount for "without_invest" list
     for i in range(1, years + 1):
         general_amount += 12 * monthly
         general_amount = general_amount * profitability / inflation
+        general_amount_2 = (general_amount_2 + 12 * monthly) / inflation
 
         amount.append(general_amount)
+        without_invest.append(general_amount_2)
         years_list.append(str(i))
-
 
     #showing plots
     plt.plot(years_list, amount, label=f'Если откладывать под {format(profitability*100-100,'.1f')}% годовых')
-    plt.plot([0, years - 1], [monthly * 12, monthly * 12 * years / inflation**years], label='Если просто откладывать')
+    plt.plot(years_list, without_invest, label='Если просто откладывать')
     plt.legend()    #show legend
     plt.title("График накоплений")
-    plt.xlabel("Года")
+    plt.xlabel("Года\nСумма в рублях указана относительно сегодняшнего дня. Чтобы узнать \nсумму в конце накопления, в поле 'Уровень роста цен' впишите 0.")
     plt.ylabel("Рубли")
+    plt.ylabel("Рубли")
+    #plt.text(0, 0, "",fontsize=7)
+    plt.subplots_adjust(bottom=0.2)    #setting bottom padding
     plt.show()
 
 
